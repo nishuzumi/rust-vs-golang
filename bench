@@ -1,0 +1,23 @@
+#!/bin/bash
+
+echo "Running Rust project..."
+cd ./rust || exit
+RUST_OUTPUT=$(cargo run -r 2>&1)
+RUST_TIME=$(echo "$RUST_OUTPUT" | grep "Elapsed time:" | sed -E 's/Elapsed time: ([0-9.]+).*/\1/')
+
+if [ -z "$RUST_TIME" ]; then
+    RUST_TIME="Error: Time not found"
+fi
+
+echo "Running Go project..."
+cd ../golang || exit
+GO_OUTPUT=$(go run main.go -ldflags="-s -w" 2>&1)
+GO_TIME=$(echo "$GO_OUTPUT" | grep "Elapsed time:" | sed -E 's/Elapsed time: ([0-9.]+).*/\1/')
+if [ -z "$GO_TIME" ]; then
+    GO_TIME="Error: Time not found"
+fi
+
+# 打印结果表格
+printf "\n%-20s %-20s\n" "Project" "Execution Time (s)"
+printf "%-20s %-20s\n" "Rust" "$RUST_TIME"
+printf "%-20s %-20s\n" "Go" "$GO_TIME"
