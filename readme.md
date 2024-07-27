@@ -18,6 +18,12 @@ As an interesting example, in Window, rust multi-threaded loop floating-point ar
 ```shell
 # Windows
 cd sin-cos
-cd rust && cargo run --release
-cd ../golang && go run main.go
+powershell -ExecutionPolicy Bypass -File ..\bench.ps1
+```
+```output
+Running Rust project...
+Running Go project...
+Project             Execution Time (s)
+Rust                2.9696159
+Go                  1.981306
 ```
